@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donut do Homer Simpson – PC's</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #FF6B8A;
+    --pink-light: #FFD6E0;
+    --pink-dark: #E85577;
+    --orange: #FF9A3C;
+    --yellow: #FFD166;
+    --bg: #FFF5F0;
+    --brown: #3D1C02;
+    --white: #fff;
+    --gray: #888;
+    --card-bg: #fff;
+    --radius: 20px;
+  }
+ 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--brown);
+    min-height: 100vh;
+  }
+ 
+  /* ─── NAVBAR ─── */
+  nav {
+    background: var(--pink);
+    padding: 0 2rem;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(255,107,138,.35);
+  }
+ 
+  .logo {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.8rem;
+    color: #fff;
+    text-shadow: 3px 3px 0 #E85577, 5px 5px 0 rgba(0,0,0,.15);
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .logo span { color: var(--yellow); }
+ 
+  .search-bar {
+    flex: 1;
+    background: rgba(255,255,255,.25);
+    border: 2px solid rgba(255,255,255,.5);
+    border-radius: 50px;
+    padding: .6rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    color: #fff;
+    font-size: .95rem;
+    font-family: 'Nunito', sans-serif;
+    cursor: text;
+    transition: background .2s;
+    max-width: 700px;
+  }
+  .search-bar:hover { background: rgba(255,255,255,.35); }
+  .search-bar input {
+    background: none; border: none; outline: none;
+    color: #fff; width: 100%; font-size: .95rem;
+    font-family: 'Nunito', sans-serif;
+  }
+  .search-bar input::placeholder { color: rgba(255,255,255,.8); }
+ 
+  .nav-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    flex-shrink: 0;
+  }
+ 
+  .btn-entrar {
+    background: transparent;
+    border: 2px solid #fff;
+    color: #fff;
+    padding: .5rem 1.4rem;
+    border-radius: 50px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: all .2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-entrar:hover { background: rgba(255,255,255,.2); }
+ 
+  .btn-criar {
+    background: var(--orange);
+    border: none;
+    color: #fff;
+    padding: .55rem 1.4rem;
+    border-radius: 50px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: all .2s;
+    box-shadow: 0 4px 12px rgba(255,154,60,.4);
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-criar:hover { background: #e8892a; transform: translateY(-1px); }
+ 
+  /* User avatar (shown when logged in) */
+  .user-greeting {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    color: #fff;
+    font-weight: 700;
+    font-size: .9rem;
+  }
+  .user-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    object-fit: cover;
+  }
+  .user-avatar-placeholder {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: var(--yellow);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--brown);
+  }
+ 
+  /* ─── BREADCRUMB ─── */
+  .breadcrumb {
+    padding: 1rem 4rem;
+    font-size: .85rem;
+    color: var(--gray);
+  }
+  .breadcrumb a { color: var(--pink); text-decoration: none; font-weight: 600; }
+  .breadcrumb a:hover { text-decoration: underline; }
+ 
+  /* ─── MAIN LAYOUT ─── */
+  .recipe-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem 4rem;
+  }
+ 
+  .recipe-header {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+  }
+ 
+  /* LEFT: info */
+  .recipe-info { flex: 1; }
+ 
+  .recipe-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    background: var(--pink-light);
+    color: var(--pink-dark);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: .35rem .9rem;
+    border-radius: 50px;
+    margin-bottom: 1rem;
+  }
+ 
+  .recipe-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.8rem;
+    color: var(--brown);
+    line-height: 1.1;
+    margin-bottom: .4rem;
+  }
+  .recipe-title span {
+    color: var(--pink);
+  }
+ 
+  .recipe-subtitle {
+    font-size: 1rem;
+    color: var(--gray);
+    margin-bottom: 1.2rem;
+    line-height: 1.6;
+  }
+ 
+  .recipe-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .meta-chip {
+    background: #fff;
+    border: 2px solid var(--pink-light);
+    border-radius: 50px;
+    padding: .4rem .9rem;
+    font-size: .88rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    color: var(--brown);
+  }
+ 
+  .recipe-stars {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    margin-bottom: 1.5rem;
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--brown);
+  }
+  .star { color: var(--yellow); font-size: 1.2rem; }
+ 
+  /* RIGHT: photo */
+  .recipe-photo-wrap {
+    width: 380px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .recipe-photo-circle {
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #FFE5A0, #FFB347 60%, #FF6B8A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 20px 50px rgba(255,107,138,.3), 0 8px 20px rgba(0,0,0,.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .recipe-photo-circle img {
+    width: 92%;
+    height: 92%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .float-emoji {
+    position: absolute;
+    width: 50px; height: 50px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    box-shadow: 0 4px 14px rgba(0,0,0,.12);
+    animation: floatBob 3s ease-in-out infinite;
+  }
+  .float-emoji:nth-child(1) { top: 0; right: 20px; animation-delay: 0s; }
+  .float-emoji:nth-child(2) { top: 50%; right: -10px; animation-delay: .7s; }
+  .float-emoji:nth-child(3) { bottom: 10px; right: 30px; animation-delay: 1.4s; }
+  .float-emoji:nth-child(4) { bottom: 30px; left: 10px; animation-delay: 2s; }
+ 
+  @keyframes floatBob {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+ 
+  /* ─── RECIPE BODY ─── */
+  .recipe-body {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+ 
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1.8rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    border: 2px solid var(--pink-light);
+  }
+ 
+  .card-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem;
+    color: var(--pink-dark);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+ 
+  .ingredient-list { list-style: none; }
+  .ingredient-list li {
+    padding: .6rem 0;
+    border-bottom: 1.5px dashed var(--pink-light);
+    font-size: .95rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    color: var(--brown);
+  }
+  .ingredient-list li:last-child { border-bottom: none; }
+  .ingredient-list li::before { content: "🍩"; font-size: .8rem; }
+ 
+  .section-divider {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
+    color: var(--orange);
+    margin: 1rem 0 .5rem;
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+  }
+ 
+  .steps-list { list-style: none; counter-reset: steps; }
+  .steps-list li {
+    counter-increment: steps;
+    padding: .8rem 0 .8rem 3rem;
+    border-bottom: 1.5px dashed var(--pink-light);
+    font-size: .93rem;
+    line-height: 1.6;
+    position: relative;
+    color: var(--brown);
+  }
+  .steps-list li:last-child { border-bottom: none; }
+  .steps-list li::before {
+    content: counter(steps);
+    position: absolute;
+    left: 0; top: .75rem;
+    background: var(--pink);
+    color: #fff;
+    font-family: 'Fredoka One', cursive;
+    font-size: .9rem;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+ 
+  /* ─── RATING ─── */
+  .rating-section {
+    background: #fff;
+    border-radius: var(--radius);
+    border: 2px solid var(--pink-light);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+  }
+  .rating-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.6rem;
+    color: var(--pink-dark);
+    margin-bottom: 1.2rem;
+  }
+  .stars-input {
+    display: flex;
+    gap: .4rem;
+    margin-bottom: 1rem;
+  }
+  .stars-input span {
+    font-size: 2.2rem;
+    cursor: pointer;
+    transition: transform .15s;
+    filter: grayscale(1);
+    opacity: .5;
+  }
+  .stars-input span.active { filter: none; opacity: 1; transform: scale(1.15); }
+  .stars-input span:hover { transform: scale(1.2); filter: none; opacity: 1; }
+ 
+  .rating-avg {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--brown);
+    margin-top: .5rem;
+  }
+ 
+  /* ─── COMMENTS ─── */
+  .comments-section {
+    background: #fff;
+    border-radius: var(--radius);
+    border: 2px solid var(--pink-light);
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+  }
+  .comments-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.6rem;
+    color: var(--pink-dark);
+    margin-bottom: 1.5rem;
+  }
+ 
+  /* Comment form */
+  .comment-form { margin-bottom: 2rem; }
+  .form-row {
+    display: flex;
+    gap: .8rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  .form-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--yellow);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--brown);
+    flex-shrink: 0;
+    border: 2px solid var(--pink-light);
+    overflow: hidden;
+  }
+  .form-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .comment-textarea {
+    flex: 1;
+    border: 2px solid var(--pink-light);
+    border-radius: 14px;
+    padding: .8rem 1rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: .95rem;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    transition: border .2s;
+    color: var(--brown);
+  }
+  .comment-textarea:focus { border-color: var(--pink); }
+ 
+  .form-actions {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    flex-wrap: wrap;
+  }
+  .photo-upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    background: var(--pink-light);
+    color: var(--pink-dark);
+    border-radius: 50px;
+    padding: .45rem 1rem;
+    font-size: .88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .photo-upload-label:hover { background: #ffc0cc; }
+  #photo-input { display: none; }
+ 
+  .photo-preview {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-top: .5rem;
+  }
+  .photo-preview-item {
+    position: relative;
+    width: 70px; height: 70px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid var(--pink-light);
+  }
+  .photo-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-preview-item .remove-photo {
+    position: absolute; top: 2px; right: 2px;
+    background: var(--pink);
+    color: #fff; border: none; border-radius: 50%;
+    width: 18px; height: 18px;
+    font-size: .7rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+ 
+  .btn-send {
+    background: var(--pink);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: .5rem 1.5rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: all .2s;
+    box-shadow: 0 4px 12px rgba(255,107,138,.35);
+  }
+  .btn-send:hover { background: var(--pink-dark); transform: translateY(-1px); }
+ 
+  /* Comment list */
+  .comment-list { display: flex; flex-direction: column; gap: 1.2rem; }
+ 
+  .comment-item {
+    display: flex;
+    gap: .9rem;
+    animation: fadeIn .4s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+ 
+  .comment-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--yellow);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--brown);
+    border: 2px solid var(--pink-light);
+    overflow: hidden;
+  }
+  .comment-avatar img { width: 100%; height: 100%; object-fit: cover; }
+ 
+  .comment-bubble {
+    background: var(--bg);
+    border-radius: 0 16px 16px 16px;
+    padding: .9rem 1.1rem;
+    flex: 1;
+    border: 1.5px solid var(--pink-light);
+  }
+  .comment-author {
+    font-weight: 800;
+    font-size: .9rem;
+    color: var(--pink-dark);
+    margin-bottom: .2rem;
+  }
+  .comment-stars { font-size: .85rem; margin-bottom: .3rem; }
+  .comment-text { font-size: .9rem; line-height: 1.5; color: var(--brown); }
+  .comment-photos {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-top: .6rem;
+  }
+  .comment-photos img {
+    width: 80px; height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid var(--pink-light);
+    cursor: pointer;
+    transition: transform .2s;
+  }
+  .comment-photos img:hover { transform: scale(1.05); }
+  .comment-time {
+    font-size: .75rem;
+    color: var(--gray);
+    margin-top: .4rem;
+  }
+ 
+  /* ─── LOGIN MODAL ─── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.4);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 24px;
+    padding: 2.5rem;
+    width: 380px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,.15);
+  }
+  .modal h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    color: var(--pink-dark);
+    margin-bottom: .5rem;
+  }
+  .modal p { font-size: .95rem; color: var(--gray); margin-bottom: 1.5rem; }
+  .modal-btns { display: flex; flex-direction: column; gap: .7rem; }
+  .modal-btn-pink {
+    background: var(--pink);
+    color: #fff; border: none;
+    border-radius: 50px;
+    padding: .7rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700; font-size: 1rem;
+    cursor: pointer;
+    transition: background .2s;
+    text-decoration: none; display: block;
+  }
+  .modal-btn-pink:hover { background: var(--pink-dark); }
+  .modal-btn-outline {
+    background: transparent;
+    color: var(--pink);
+    border: 2px solid var(--pink);
+    border-radius: 50px;
+    padding: .65rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700; font-size: 1rem;
+    cursor: pointer;
+    transition: all .2s;
+    text-decoration: none; display: block;
+  }
+  .modal-btn-outline:hover { background: var(--pink-light); }
+  .modal-close {
+    display: block; margin-top: .8rem;
+    background: none; border: none;
+    color: var(--gray); font-size: .9rem;
+    cursor: pointer; font-family: 'Nunito', sans-serif;
+  }
+ 
+  /* ─── IMAGE LIGHTBOX ─── */
+  .lightbox {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.85);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 16px;
+    object-fit: contain;
+  }
+  .lightbox-close {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    background: #fff; border: none; border-radius: 50%;
+    width: 40px; height: 40px; font-size: 1.2rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+ 
+  @media (max-width: 768px) {
+    .recipe-header { flex-direction: column-reverse; }
+    .recipe-photo-wrap { width: 100%; }
+    .recipe-body { grid-template-columns: 1fr; }
+    nav { padding: 0 1rem; }
+    .recipe-page { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+ 
+<!-- ═══ NAVBAR ═══ -->
+<nav>
+  <a class="logo" href="#">PC<span>'S</span></a>
+ 
+  <div class="search-bar">
+    <span>🔍</span>
+    <input type="text" placeholder="Pesquise receitas mágicas...">
+  </div>
+ 
+  <div class="nav-actions" id="nav-actions">
+    <!-- Rendered by JS based on login state -->
+  </div>
+</nav>
+ 
+<!-- ═══ MODAL LOGIN/CADASTRO ═══ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2>Oi, chefinho! 👋</h2>
+    <p>Entre na sua conta para avaliar e comentar as receitas!</p>
+    <div class="modal-btns">
+      <a href="/login" class="modal-btn-pink">🔐 Entrar na conta</a>
+      <a href="/cadastro" class="modal-btn-outline">✨ Criar conta grátis</a>
+    </div>
+    <button class="modal-close" id="modal-close">Agora não</button>
+  </div>
+</div>
+ 
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+ 
+<!-- ═══ BREADCRUMB ═══ -->
+<div class="breadcrumb">
+  <a href="#">Início</a> › <a href="#">Doces</a> › <a href="#">Inspirados em Cartoons</a> › Donut do Homer Simpson
+</div>
+ 
+<!-- ═══ RECIPE PAGE ═══ -->
+<div class="recipe-page">
+ 
+  <!-- Header -->
+  <div class="recipe-header">
+    <div class="recipe-info">
+      <div class="recipe-badge">✨ Cartoon · Os Simpsons</div>
+      <h1 class="recipe-title">Donut do<br><span>Homer Simpson</span> 🍩</h1>
+      <p class="recipe-subtitle">
+        O donut mais famoso da TV! Fofo por dentro, crocante por fora e coberto com aquela glace rosa icônica cheia de granulado colorido. Perfeito para fãs de Os Simpsons!
+      </p>
+      <div class="recipe-meta">
+        <div class="meta-chip">⏱️ 1h 30min</div>
+        <div class="meta-chip">🍽️ 12 donuts</div>
+        <div class="meta-chip">⭐ Fácil</div>
+        <div class="meta-chip">👨‍🍳 Frito</div>
+      </div>
+      <div class="recipe-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        <span style="color:var(--gray); font-weight:600; font-size:.88rem;">4.9 (238 avaliações)</span>
+      </div>
+    </div>
+ 
+    <div class="recipe-photo-wrap">
+      <div class="recipe-photo-circle">
+        <img src="/mnt/user-data/uploads/1780333481139_image.png" alt="Donut do Homer Simpson" id="donut-img">
+      </div>
+      <div class="float-emoji">🍩</div>
+      <div class="float-emoji">🌈</div>
+      <div class="float-emoji">⭐</div>
+      <div class="float-emoji">🎉</div>
+    </div>
+  </div>
+ 
+  <!-- Ingredients + Steps -->
+  <div class="recipe-body">
+ 
+    <!-- Ingredients -->
+    <div class="card">
+      <div class="card-title">🧾 Ingredientes</div>
+ 
+      <div class="section-divider">🥣 Massa</div>
+      <ul class="ingredient-list">
+        <li>6 g de fermento biológico seco</li>
+        <li>274 g de farinha de trigo</li>
+        <li>260 ml de leite</li>
+        <li>5 g de açúcar</li>
+        <li>3 g de sal</li>
+        <li>50 g de margarina</li>
+        <li>1 ovo</li>
+        <li>5 ml de essência de baunilha</li>
+      </ul>
+ 
+      <div class="section-divider" style="margin-top:1rem">🍓 Cobertura Rosa</div>
+      <ul class="ingredient-list">
+        <li>100 g (¾ xíc.) de açúcar de confeiteiro</li>
+        <li>20 g (1 col. sopa) de leite integral</li>
+        <li>5 gotas de corante líquido rosa</li>
+        <li>Granulado colorido a gosto</li>
+      </ul>
+    </div>
+ 
+    <!-- Steps -->
+    <div class="card">
+      <div class="card-title">👨‍🍳 Modo de preparo</div>
+      <ol class="steps-list">
+        <li>Misture o açúcar com o leite morno, a manteiga e o fermento.</li>
+        <li>Coloque em uma tigela a farinha, abra um buraco no centro e adicione a mistura. Mexa bem.</li>
+        <li>Adicione o ovo e o sal. Mexa novamente.</li>
+        <li>Coloque a massa na bancada e amasse com as mãos (ou batedeira) por cerca de 10 minutos, até obter uma massa brilhante e elástica.</li>
+        <li>Não coloque mais farinha — a massa vai soltando das mãos naturalmente conforme você sova.</li>
+        <li>Pincele uma travessa com óleo, coloque a massa, cubra com plástico aderente e um pano. Deixe dobrar de volume.</li>
+        <li>Abra a massa com rolo na espessura de 1 dedo (≈ 1,5 cm).</li>
+        <li>Recorte com cortador redondo ou copo de boca larga.</li>
+        <li>Corte o centro com algo menor (tampinha de garrafa, por exemplo).</li>
+        <li>Coloque em tabuleiro enfarinhado e deixe dobrar de volume novamente.</li>
+        <li>Frite em óleo quente por 2 minutos de cada lado, até dourar.</li>
+        <li>Para a cobertura: peneire o açúcar de confeiteiro, junte o leite e o corante rosa. Misture até obter creme liso.</li>
+        <li>Mergulhe a parte superior do donut na cobertura e finalize com granulado colorido. <em>D'oh!</em> 🍩</li>
+      </ol>
+    </div>
+  </div>
+ 
+  <!-- Rating -->
+  <div class="rating-section">
+    <div class="rating-title">⭐ Avalie esta receita</div>
+    <div class="stars-input" id="stars-input">
+      <span data-v="1">★</span>
+      <span data-v="2">★</span>
+      <span data-v="3">★</span>
+      <span data-v="4">★</span>
+      <span data-v="5">★</span>
+    </div>
+    <div class="rating-avg">
+      <span>★★★★★</span> 4.9 de 5 · 238 avaliações
+    </div>
+  </div>
+ 
+  <!-- Comments -->
+  <div class="comments-section">
+    <div class="comments-title">💬 Comentários <span id="comment-count" style="font-size:1rem;color:var(--gray);font-family:'Nunito',sans-serif;">(3)</span></div>
+ 
+    <!-- Comment form -->
+    <div class="comment-form">
+      <div class="form-row">
+        <div class="form-avatar" id="form-avatar">😊</div>
+        <textarea class="comment-textarea" id="comment-text" placeholder="Conta como ficou! Tirou foto? Manda aqui! 📸"></textarea>
+      </div>
+ 
+      <div id="photo-preview" class="photo-preview"></div>
+ 
+      <div class="form-actions">
+        <label class="photo-upload-label" for="photo-input">
+          📷 Adicionar foto
+        </label>
+        <input type="file" id="photo-input" accept="image/*" multiple>
+        <button class="btn-send" id="btn-send">Enviar comentário 🍩</button>
+      </div>
+    </div>
+ 
+    <!-- Existing comments -->
+    <div class="comment-list" id="comment-list">
+ 
+      <div class="comment-item">
+        <div class="comment-avatar">🧁</div>
+        <div class="comment-bubble">
+          <div class="comment-author">Mariana S.</div>
+          <div class="comment-stars">⭐⭐⭐⭐⭐</div>
+          <div class="comment-text">Fiz pra festa do meu filho e foi um sucesso total! A cobertura rosa ficou exatamente a cor do donut do Homer haha. Super recomendo!</div>
+          <div class="comment-time">há 2 dias</div>
+        </div>
+      </div>
+ 
+      <div class="comment-item">
+        <div class="comment-avatar">🍕</div>
+        <div class="comment-bubble">
+          <div class="comment-author">Lucas M.</div>
+          <div class="comment-stars">⭐⭐⭐⭐</div>
+          <div class="comment-text">Ficou incrível! Só tomei cuidado com o óleo pra não queimar. Da próxima faço com chocolate branco também. 😋</div>
+          <div class="comment-time">há 5 dias</div>
+        </div>
+      </div>
+ 
+      <div class="comment-item">
+        <div class="comment-avatar">🌸</div>
+        <div class="comment-bubble">
+          <div class="comment-author">Fernanda K.</div>
+          <div class="comment-stars">⭐⭐⭐⭐⭐</div>
+          <div class="comment-text">Melhor receita de donut que já fiz! A massa ficou super fofinha. Fiz com as crianças e elas amaram decorar com o granulado. Obrigada PC's! 💕</div>
+          <div class="comment-time">há 1 semana</div>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+ 
+</div><!-- /recipe-page -->
+ 
+<script>
+// ─── SIMULATED AUTH STATE ───────────────────────────────────────────
+// Troque para simular estados de login
+const AUTH = {
+  loggedIn: false, // mude para true para testar usuário logado
+  user: {
+    name: "Ana Lima",
+    avatar: null, // URL de foto ou null
+    initial: "A"
+  }
+};
+ 
+// ─── NAVBAR ───────────────────────────────────────────────────────
+const navActions = document.getElementById('nav-actions');
+const formAvatar = document.getElementById('form-avatar');
+ 
+function renderNav() {
+  if (AUTH.loggedIn) {
+    navActions.innerHTML = `
+      <div class="user-greeting">
+        ${AUTH.user.avatar
+          ? `<img class="user-avatar" src="${AUTH.user.avatar}" alt="${AUTH.user.name}">`
+          : `<div class="user-avatar-placeholder">${AUTH.user.initial}</div>`
+        }
+        <span>Bem-vindo(a), <strong>${AUTH.user.name.split(' ')[0]}</strong>! 👋</span>
+      </div>
+    `;
+    // Update form avatar
+    if (AUTH.user.avatar) {
+      formAvatar.innerHTML = `<img src="${AUTH.user.avatar}" alt="">`;
+    } else {
+      formAvatar.textContent = AUTH.user.initial;
+    }
+  } else {
+    navActions.innerHTML = `
+      <button class="btn-entrar" onclick="requireLogin()">Entrar</button>
+      <a href="/cadastro" class="btn-criar">Criar Conta 🍩</a>
+    `;
+  }
+}
+renderNav();
+ 
+// ─── LOGIN GATE ────────────────────────────────────────────────────
+const modal = document.getElementById('modal');
+const modalClose = document.getElementById('modal-close');
+ 
+function requireLogin() {
+  if (!AUTH.loggedIn) {
+    modal.classList.add('open');
+    return false;
+  }
+  return true;
+}
+modalClose.addEventListener('click', () => modal.classList.remove('open'));
+modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+ 
+// ─── STARS RATING ─────────────────────────────────────────────────
+let selectedRating = 0;
+const starsInput = document.getElementById('stars-input');
+const starSpans = starsInput.querySelectorAll('span');
+ 
+function highlightStars(n) {
+  starSpans.forEach((s, i) => {
+    s.classList.toggle('active', i < n);
+  });
+}
+ 
+starSpans.forEach((s, i) => {
+  s.addEventListener('mouseenter', () => highlightStars(i + 1));
+  s.addEventListener('mouseleave', () => highlightStars(selectedRating));
+  s.addEventListener('click', () => {
+    if (!requireLogin()) return;
+    selectedRating = i + 1;
+    highlightStars(selectedRating);
+    showToast(`Você avaliou com ${selectedRating} estrela${selectedRating > 1 ? 's' : ''}! ⭐`);
+  });
+});
+ 
+// ─── PHOTO UPLOAD ─────────────────────────────────────────────────
+const photoInput = document.getElementById('photo-input');
+const photoPreview = document.getElementById('photo-preview');
+let selectedPhotos = [];
+ 
+photoInput.addEventListener('change', e => {
+  const files = Array.from(e.target.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const id = Date.now() + Math.random();
+      selectedPhotos.push({ id, dataUrl: ev.target.result });
+      renderPhotoPreviews();
+    };
+    reader.readAsDataURL(file);
+  });
+  photoInput.value = '';
+});
+ 
+function renderPhotoPreviews() {
+  photoPreview.innerHTML = selectedPhotos.map(p => `
+    <div class="photo-preview-item">
+      <img src="${p.dataUrl}" alt="">
+      <button class="remove-photo" onclick="removePhoto('${p.id}')">✕</button>
+    </div>
+  `).join('');
+}
+ 
+function removePhoto(id) {
+  selectedPhotos = selectedPhotos.filter(p => String(p.id) !== String(id));
+  renderPhotoPreviews();
+}
+ 
+// ─── SEND COMMENT ─────────────────────────────────────────────────
+const btnSend = document.getElementById('btn-send');
+const commentText = document.getElementById('comment-text');
+const commentList = document.getElementById('comment-list');
+const commentCount = document.getElementById('comment-count');
+let totalComments = 3;
+ 
+btnSend.addEventListener('click', () => {
+  if (!requireLogin()) return;
+ 
+  const text = commentText.value.trim();
+  if (!text && selectedPhotos.length === 0) {
+    commentText.focus();
+    return;
+  }
+ 
+  const starsDisplay = selectedRating > 0
+    ? '⭐'.repeat(selectedRating)
+    : '';
+ 
+  const photosHTML = selectedPhotos.length > 0
+    ? `<div class="comment-photos">${selectedPhotos.map(p =>
+        `<img src="${p.dataUrl}" alt="foto" onclick="openLightbox('${p.dataUrl}')">`
+      ).join('')}</div>`
+    : '';
+ 
+  const avatarHTML = AUTH.user.avatar
+    ? `<img src="${AUTH.user.avatar}" alt="">`
+    : AUTH.user.initial;
+ 
+  const item = document.createElement('div');
+  item.className = 'comment-item';
+  item.innerHTML = `
+    <div class="comment-avatar">${avatarHTML}</div>
+    <div class="comment-bubble">
+      <div class="comment-author">${AUTH.user.name}</div>
+      ${starsDisplay ? `<div class="comment-stars">${starsDisplay}</div>` : ''}
+      ${text ? `<div class="comment-text">${escapeHTML(text)}</div>` : ''}
+      ${photosHTML}
+      <div class="comment-time">agora mesmo</div>
+    </div>
+  `;
+ 
+  commentList.insertBefore(item, commentList.firstChild);
+  commentText.value = '';
+  selectedPhotos = [];
+  renderPhotoPreviews();
+  totalComments++;
+  commentCount.textContent = `(${totalComments})`;
+ 
+  showToast('Comentário enviado! 🎉');
+});
+ 
+// ─── LIGHTBOX ────────────────────────────────────────────────────
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxClose = document.getElementById('lightbox-close');
+ 
+function openLightbox(src) {
+  lightboxImg.src = src;
+  lightbox.classList.add('open');
+}
+lightboxClose.addEventListener('click', () => lightbox.classList.remove('open'));
+lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+ 
+// ─── TOAST ───────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = `
+    position:fixed; bottom:2rem; left:50%; transform:translateX(-50%);
+    background:var(--pink); color:#fff; padding:.7rem 1.5rem;
+    border-radius:50px; font-family:'Nunito',sans-serif; font-weight:700;
+    font-size:.95rem; box-shadow:0 8px 24px rgba(255,107,138,.4);
+    z-index:3000; animation:fadeIn .3s ease;
+  `;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2800);
+}
+ 
+// ─── UTILS ───────────────────────────────────────────────────────
+function escapeHTML(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+ 
+// ─── DONUT IMAGE FALLBACK ─────────────────────────────────────────
+// The donut image path won't work in browser context; use a placeholder style
+document.getElementById('donut-img').onerror = function() {
+  this.style.display = 'none';
+  this.parentElement.innerHTML = '<div style="font-size:8rem;display:flex;align-items:center;justify-content:center;width:100%;height:100%;">🍩</div>';
+};
+</script>
+</body>
+</html>

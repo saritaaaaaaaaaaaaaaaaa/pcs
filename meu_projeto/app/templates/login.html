@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login · Receitas Animadas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #FFF8F0;
+            --coral: #FF6B6B;
+            --coral-dark: #E85555;
+            --orange: #FFA552;
+            --yellow: #FFD166;
+            --brown: #6B3F2A;
+            --brown-light: #A0624A;
+            --white: #ffffff;
+            --shadow: 0 8px 40px rgba(107,63,42,0.13);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--cream);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.35;
+            animation: float 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .blob-1 { width: 420px; height: 420px; background: var(--orange); top: -100px; left: -100px; animation-delay: 0s; }
+        .blob-2 { width: 320px; height: 320px; background: var(--coral); bottom: -80px; right: -60px; animation-delay: -3s; }
+        .blob-3 { width: 200px; height: 200px; background: var(--yellow); bottom: 40px; left: 60px; animation-delay: -5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.04); }
+        }
+
+        .food-float {
+            position: fixed;
+            font-size: 2rem;
+            animation: floatUp 12s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+        }
+        @keyframes floatUp {
+            0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
+            10%  { opacity: 0.7; }
+            90%  { opacity: 0.5; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+        .food-float:nth-child(1)  { left: 8%;  animation-delay: 0s;   animation-duration: 14s; font-size: 1.8rem; }
+        .food-float:nth-child(2)  { left: 22%; animation-delay: 2s;   animation-duration: 11s; }
+        .food-float:nth-child(3)  { left: 38%; animation-delay: 4s;   animation-duration: 13s; font-size: 1.4rem; }
+        .food-float:nth-child(4)  { left: 55%; animation-delay: 1s;   animation-duration: 10s; font-size: 2.4rem; }
+        .food-float:nth-child(5)  { left: 70%; animation-delay: 3s;   animation-duration: 15s; font-size: 1.6rem; }
+        .food-float:nth-child(6)  { left: 85%; animation-delay: 5s;   animation-duration: 12s; }
+
+        .card-wrapper {
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.7s cubic-bezier(.22,1,.36,1) both;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 28px;
+            width: 380px;
+            padding: 40px 38px 34px;
+            box-shadow: var(--shadow), 0 2px 0 0 var(--yellow) inset, 0 -4px 0 0 var(--coral) inset;
+            position: relative;
+        }
+
+        .card::before {
+            content: '🍳';
+            position: absolute;
+            top: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+            animation: wiggle 3s ease-in-out infinite;
+        }
+        @keyframes wiggle {
+            0%,100% { transform: translateX(-50%) rotate(-8deg); }
+            50%      { transform: translateX(-50%) rotate(8deg); }
+        }
+
+        .card-logo {
+            text-align: center;
+            margin-top: 14px;
+            margin-bottom: 26px;
+        }
+        .card-logo h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2rem;
+            color: var(--coral);
+            line-height: 1;
+        }
+        .card-logo p {
+            font-size: 0.82rem;
+            color: var(--brown-light);
+            margin-top: 4px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, var(--yellow) 0 6px, transparent 6px 10px);
+        }
+        .divider span { font-size: 1.1rem; }
+
+        .field {
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .field label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--brown);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .field .input-wrap {
+            position: relative;
+        }
+        .field .icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+        .field input {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
+            border: 2.5px solid #EDE0D4;
+            border-radius: 12px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--brown);
+            background: var(--cream);
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            outline: none;
+        }
+        .field input:focus {
+            border-color: var(--orange);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(255,165,82,0.15);
+        }
+        .field input::placeholder { color: #C5A99A; font-weight: 600; }
+
+        .forgot {
+            text-align: right;
+            margin-top: -8px;
+            margin-bottom: 22px;
+        }
+        .forgot a {
+            font-size: 0.78rem;
+            color: var(--brown-light);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+        .forgot a:hover { color: var(--coral); }
+
+        .btn-entrar {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--coral), var(--orange));
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            letter-spacing: 0.03em;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 18px rgba(255,107,107,0.38);
+        }
+        .btn-entrar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent);
+            pointer-events: none;
+        }
+        .btn-entrar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(255,107,107,0.45);
+        }
+        .btn-entrar:active { transform: translateY(0); }
+
+        .register {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 0.88rem;
+            color: var(--brown-light);
+            font-weight: 600;
+        }
+        .register a {
+            color: var(--coral);
+            text-decoration: none;
+            font-weight: 800;
+            border-bottom: 2px solid var(--yellow);
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .register a:hover { color: var(--coral-dark); border-color: var(--coral); }
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 20px;
+        }
+        .dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); }
+        .dots span:nth-child(2) { background: var(--coral); }
+        .dots span:nth-child(3) { background: var(--orange); }
+    </style>
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="food-float">🥕</div>
+    <div class="food-float">🍰</div>
+    <div class="food-float">🥄</div>
+    <div class="food-float">🍪</div>
+    <div class="food-float">🫐</div>
+    <div class="food-float">🌶️</div>
+
+    <div class="card-wrapper">
+        <div class="card">
+            <div class="card-logo">
+                <h1>Receitas Animadas</h1>
+                <p>Bem-vindo de volta, chefe! 👨‍🍳</p>
+            </div>
+
+            <div class="divider"><span>🍴</span></div>
+
+            <form>
+                <div class="field">
+                    <label for="contato">Email ou Telefone</label>
+                    <div class="input-wrap">
+                        <span class="icon">📧</span>
+                        <input type="text" id="contato" placeholder="@email.com/xx xxxxxxxxx" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="senha">Senha</label>
+                    <div class="input-wrap">
+                        <span class="icon">🔒</span>
+                        <input type="password" id="senha" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="forgot">
+                    <a href="#">Esqueceu a senha?</a>
+                </div>
+
+                <button type="submit" class="btn-entrar">Entrar na Cozinha 🍽️</button>
+            </form>
+
+            <div class="register">
+                Não tem conta? <a href="cadastro.html">Criar uma agora</a>
+            </div>
+
+            <div class="dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

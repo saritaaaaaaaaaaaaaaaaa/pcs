@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
+
+.container {
+    text-align: center;
+    margin-top: 100px;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
