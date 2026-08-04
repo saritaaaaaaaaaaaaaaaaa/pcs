@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login · Receitas Animadas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/login.css') }}">
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="food-float">🥕</div>
+    <div class="food-float">🍰</div>
+    <div class="food-float">🥄</div>
+    <div class="food-float">🍪</div>
+    <div class="food-float">🫐</div>
+    <div class="food-float">🌶️</div>
+
+    <div class="card-wrapper">
+        <div class="card">
+            <div class="card-logo">
+                <h1>Receitas Animadas</h1>
+                <p>Bem-vindo de volta, chefe! 👨‍🍳</p>
+            </div>
+
+            <div class="divider"><span>🍴</span></div>
+
+            {% if error == 'invalid' %}
+            <p class="form-message error">E-mail ou senha inválidos.</p>
+            {% elif error == 'registered' %}
+            <p class="form-message success">Cadastro realizado. Entre com seus dados.</p>
+            {% endif %}
+
+            <form action="/login" method="post">
+                <div class="field">
+                    <label for="contato">Email ou Telefone</label>
+                    <div class="input-wrap">
+                        <span class="icon">📧</span>
+                        <input type="email" name="email" id="email" placeholder="@email.com/xx xxxxxxxxx" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="senha">Senha</label>
+                    <div class="input-wrap">
+                        <span class="icon">🔒</span>
+                        <input type="password" name="senha" id="senha" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="forgot">
+                    <a href="#">Esqueceu a senha?</a>
+                </div>
+
+                <button type="submit" class="btn-entrar">Entrar na Cozinha 🍽️</button>
+            </form>
+
+            <div class="register">
+                Não tem conta? <a href="/cadastro">Criar uma agora</a>
+            </div>
+
+            <div class="dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

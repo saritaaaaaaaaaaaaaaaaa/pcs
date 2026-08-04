@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro · Receitas Animadas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/cadastro.css') }}">
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="food-float">🧁</div>
+    <div class="food-float">🥦</div>
+    <div class="food-float">🍋</div>
+    <div class="food-float">🍕</div>
+    <div class="food-float">🫙</div>
+    <div class="food-float">🥚</div>
+
+    <div class="card-wrapper">
+        <div class="card">
+            <div class="card-logo">
+                <img src="{{ url_for('static', path='img/logo5.png') }}" alt="FoodToon">
+                <p>Crie sua conta e comece a cozinhar! 🥘</p>
+            </div>
+
+            <div class="divider"><span>🥄</span></div>
+
+            {% if error == 'email' %}
+            <p class="form-message error">Este e-mail já está cadastrado.</p>
+            {% endif %}
+
+            <form action="/register" method="post">
+                <div class="form-grid">
+
+                    <div class="field full">
+                        <label for="contato">Email ou Telefone</label>
+                        <div class="input-wrap">
+                            <span class="icon">📧</span>
+                            <input type="email" id="email" name="email" placeholder="@email.com/xx xxxxxxxxx" required>
+                        </div>
+                    </div>
+
+                     <div class="field full">
+                        <label for="telefone">Telefone</label>
+                        <div class="input-wrap">
+                            <span class="icon"></span>
+                            <input type="text" id="telefone" name="telefone" placeholder="(xx) xxxxx-xxxx" required>
+                        </div>
+                    </div>
+
+                    <div class="field full">
+                        <label for="usuario">Nome de Usuário</label>
+                        <div class="input-wrap">
+                            <span class="icon">👤</span>
+                            <input type="text" id="usuario" name="nome" placeholder="usuário" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="senha">Senha</label>
+                        <div class="input-wrap">
+                            <span class="icon">🔒</span>
+                            <input type="password" name="senha" id="senha" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="nascimento">Nascimento</label>
+                        <div class="input-wrap">
+                            <span class="icon">🎂</span>
+                            <input type="date" id="nascimento" name="data_nascimento" required>
+                        </div>
+                    </div>
+
+                    <div class="field full">
+                        <label for="nivel">Nível de Experiência</label>
+                        <div class="input-wrap">
+                            <span class="icon">👨‍🍳</span>
+                            <select id="nivel" name="nivel" required>
+                                <option value="">Selecione seu nível...</option>
+                                <option value="iniciante">🌱 Iniciante</option>
+                                <option value="intermediario">🍴 Intermediário</option>
+                                <option value="avancado">⭐ Avançado</option>
+                            </select>
+                            <span class="select-arrow">▼</span>
+                        </div>
+                        <div class="nivel-info">
+                            <span class="nivel-badge green">🌱 Aprendiz</span>
+                            <span class="nivel-badge blue">🍴 Cozinheiro</span>
+                            <span class="nivel-badge red">⭐ Chef</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn-cadastrar">Criar Minha Conta 🍽️</button>
+            </form>
+
+            <div class="login-link">
+                Já tem conta? <a href="/login">Fazer login</a>
+            </div>
+
+            <div class="terms">
+                Ao criar conta você concorda com nossos <a href="#">Termos de Uso</a>
+            </div>
+
+            <div class="dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

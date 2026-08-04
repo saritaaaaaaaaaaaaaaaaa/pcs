@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodToon · Receitas Mágicas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FFF8F0;
+      --coral: #FF6B6B;
+      --coral-dark: #E85555;
+      --orange: #FFA552;
+      --yellow: #FFD166;
+      --brown: #6B3F2A;
+      --brown-light: #A0624A;
+      --dark: #fa799b;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--cream);
+      color: var(--brown);
+      overflow-x: hidden;
+    }
+
+    .bg-blobs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.28;
+      animation: blobFloat 10s ease-in-out infinite;
+    }
+    .blob-1 { width: 500px; height: 500px; background: var(--orange); top: -120px; left: -120px; animation-delay: 0s; }
+    .blob-2 { width: 400px; height: 400px; background: var(--coral); top: 30%; right: -100px; animation-delay: -4s; }
+    .blob-3 { width: 300px; height: 300px; background: var(--yellow); bottom: 10%; left: 20%; animation-delay: -7s; }
+    @keyframes blobFloat {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-24px) scale(1.05); }
+    }
+
+    .food-float {
+      position: fixed;
+      animation: floatUp 14s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      font-size: 1.8rem;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+      8%   { opacity: 0.65; }
+      92%  { opacity: 0.45; }
+      100% { transform: translateY(-8vh) rotate(360deg); opacity: 0; }
+    }
+    .food-float:nth-child(1) { left: 4%;  animation-delay: 0s;   animation-duration: 15s; font-size: 1.5rem; }
+    .food-float:nth-child(2) { left: 14%; animation-delay: 2.5s; animation-duration: 12s; font-size: 2rem; }
+    .food-float:nth-child(3) { left: 28%; animation-delay: 5s;   animation-duration: 16s; font-size: 1.3rem; }
+    .food-float:nth-child(4) { left: 45%; animation-delay: 1s;   animation-duration: 11s; font-size: 2.2rem; }
+    .food-float:nth-child(5) { left: 62%; animation-delay: 3.5s; animation-duration: 13s; font-size: 1.6rem; }
+    .food-float:nth-child(6) { left: 78%; animation-delay: 6s;   animation-duration: 14s; font-size: 1.4rem; }
+    .food-float:nth-child(7) { left: 90%; animation-delay: 0.5s; animation-duration: 17s; font-size: 1.9rem; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(249, 111, 141, 0.96);
+      backdrop-filter: blur(12px);
+      padding: 14px 48px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.18);
+    }
+
+    .logo {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.8rem;
+      color: var(--coral);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .logo span { color: var(--yellow); }
+
+    .search-bar { flex: 1; position: relative; }
+    .search-bar input {
+      width: 100%;
+      padding: 11px 20px 11px 44px;
+      border-radius: 30px;
+      border: 2.5px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .search-bar input::placeholder { color: rgba(255,255,255,0.4); }
+    .search-bar input:focus {
+      border-color: var(--orange);
+      background: rgba(255,255,255,0.12);
+    }
+    .search-bar .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    .nav-btns { display: flex; gap: 10px; flex-shrink: 0; align-items: center; }
+    .nav-btns form { margin: 0; }
+    .user-greeting { color: white; font-weight: 800; }
+
+    .btn {
+      padding: 10px 22px;
+      border-radius: 22px;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2.5px solid rgba(255,255,255,0.2);
+      color: white;
+    }
+    .btn-outline:hover { border-color: var(--yellow); color: var(--yellow); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--coral), var(--orange));
+      color: white;
+      box-shadow: 0 4px 16px rgba(255,107,107,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,107,0.5); }
+
+    .hero {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 40px;
+      padding: 90px 64px 80px;
+      min-height: 88vh;
+    }
+
+    .hero-text { animation: slideUp 0.8s cubic-bezier(.22,1,.36,1) both; }
+    .hero-visual { animation: slideUp 0.8s cubic-bezier(.22,1,.36,1) 0.15s both; }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,107,107,0.12);
+      border: 2px solid rgba(255,107,107,0.3);
+      color: var(--coral-dark);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 6px 16px;
+      border-radius: 30px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .hero-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 3.8rem;
+      line-height: 1.1;
+      color: var(--brown);
+      margin-bottom: 20px;
+    }
+    .hero-title .highlight {
+      color: var(--coral);
+      position: relative;
+      display: inline-block;
+    }
+    .hero-title .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 2px; left: 0; right: 0;
+      height: 8px;
+      background: var(--yellow);
+      z-index: -1;
+      border-radius: 4px;
+      transform: rotate(-1deg);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--brown-light);
+      font-weight: 600;
+      line-height: 1.7;
+      max-width: 460px;
+      margin-bottom: 36px;
+    }
+
+    .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .btn-hero { padding: 14px 32px; font-size: 1rem; border-radius: 16px; box-shadow: 0 6px 20px rgba(255,107,107,0.38); }
+    .hero-link {
+      font-size: 0.9rem;
+      color: var(--brown-light);
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 2px solid var(--yellow);
+      padding-bottom: 2px;
+      transition: color 0.2s;
+    }
+    .hero-link:hover { color: var(--coral); }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 2px dashed rgba(160,98,74,0.2);
+    }
+    .stat-num {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.8rem;
+      color: var(--coral);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--brown-light);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-plate {
+      width: 340px; height: 340px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9rem;
+      box-shadow: 0 20px 60px rgba(255,165,82,0.4), 0 0 0 16px rgba(255,209,102,0.2);
+      animation: plateBounce 4s ease-in-out infinite;
+      position: relative;
+      z-index: 2;
+    }
+    @keyframes plateBounce {
+      0%,100% { transform: translateY(0) rotate(-3deg); }
+      50%      { transform: translateY(-18px) rotate(3deg); }
+    }
+    .hero-orbit {
+      position: absolute;
+      width: 440px; height: 440px;
+      border: 3px dashed rgba(255,107,107,0.25);
+      border-radius: 50%;
+      animation: spin 18s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .orbit-dot {
+      position: absolute;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+      animation: spinReverse 18s linear infinite;
+    }
+    @keyframes spinReverse { to { transform: rotate(-360deg); } }
+    .orbit-dot:nth-child(1) { top: -26px; left: 50%; transform: translateX(-50%); }
+    .orbit-dot:nth-child(2) { bottom: -26px; left: 50%; transform: translateX(-50%); }
+    .orbit-dot:nth-child(3) { left: -26px; top: 50%; transform: translateY(-50%); }
+    .orbit-dot:nth-child(4) { right: -26px; top: 50%; transform: translateY(-50%); }
+
+    .section-title { text-align: center; margin-bottom: 40px; }
+    .section-title h2 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.4rem;
+      color: var(--brown);
+      line-height: 1;
+    }
+    .section-title p {
+      font-size: 0.95rem;
+      color: var(--brown-light);
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    .section-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .section-divider::before, .section-divider::after {
+      content: '';
+      width: 60px; height: 3px;
+      background: repeating-linear-gradient(90deg, var(--yellow) 0 6px, transparent 6px 10px);
+      border-radius: 2px;
+    }
+
+    .categories-section {
+      position: relative;
+      z-index: 2;
+      padding: 60px 64px;
+      background: white;
+    }
+    .categories-grid {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .category-card {
+      background: var(--cream);
+      border: 2.5px solid #EDE0D4;
+      padding: 18px 28px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
+      text-align: center;
+      min-width: 120px;
+    }
+    .category-card:hover {
+      transform: translateY(-6px);
+      background: var(--yellow);
+      border-color: var(--orange);
+      box-shadow: 0 10px 30px rgba(255,165,82,0.3);
+    }
+    .category-card .cat-emoji { font-size: 2.4rem; display: block; margin-bottom: 6px; }
+    .category-card .cat-name {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--brown);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .recipes-section {
+      position: relative;
+      z-index: 2;
+      padding: 70px 64px;
+    }
+    .recipes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .recipe-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(107,63,42,0.1);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .recipe-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(107,63,42,0.16);
+    }
+    .card-thumb-emoji {
+      width: 100%; height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+    }
+    .card-body { padding: 20px; }
+    .card-tags { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+    .card-tag {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .tag-doce   { background: #FFF0F5; color: var(--coral); border: 1.5px solid #FFBDD0; }
+    .tag-kids   { background: #FFF8E0; color: #B8860B; border: 1.5px solid var(--yellow); }
+    .tag-rapido { background: #E8FFF0; color: #2A8A50; border: 1.5px solid #A8DFB6; }
+    .tag-festa  { background: #F0EEFF; color: #6B4DC9; border: 1.5px solid #C4B8FF; }
+
+    .card-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.15rem;
+      color: var(--brown);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .card-desc {
+      font-size: 0.84rem;
+      color: var(--brown-light);
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; }
+    .card-meta {
+      font-size: 0.75rem;
+      color: #C5A99A;
+      font-weight: 700;
+      display: flex;
+      gap: 12px;
+    }
+    .btn-ver {
+      padding: 8px 18px;
+      font-size: 0.8rem;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--coral), var(--orange));
+      color: white;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 3px 10px rgba(255,107,107,0.3);
+    }
+    .btn-ver:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(255,107,107,0.4); }
+
+    .cta-banner {
+      position: relative;
+      z-index: 2;
+      margin: 0 64px 70px;
+      background: var(--dark);
+      border-radius: 28px;
+      padding: 56px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      overflow: hidden;
+      flex-wrap: wrap;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: rgba(255,107,107,0.12);
+      top: -100px; right: -80px;
+      filter: blur(40px);
+    }
+    .cta-banner::after {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(255,209,102,0.1);
+      bottom: -80px; left: 60px;
+      filter: blur(40px);
+    }
+    .cta-text { position: relative; z-index: 2; }
+    .cta-text h2 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.2rem;
+      color: white;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .cta-text h2 span { color: var(--yellow); }
+    .cta-text p {
+      color: rgba(255,255,255,0.6);
+      font-weight: 600;
+      font-size: 0.95rem;
+      max-width: 380px;
+      line-height: 1.6;
+    }
+    .cta-actions { position: relative; z-index: 2; display: flex; gap: 14px; flex-shrink: 0; flex-wrap: wrap; }
+    .btn-cta-primary {
+      padding: 14px 30px;
+      font-size: 0.95rem;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--coral), var(--orange));
+      box-shadow: 0 6px 20px rgba(255,107,107,0.45);
+    }
+    .btn-cta-secondary {
+      padding: 14px 30px;
+      font-size: 0.95rem;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.15);
+      color: white;
+    }
+    .btn-cta-secondary:hover { background: rgba(255,255,255,0.14); }
+
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.6);
+      padding: 36px 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .footer-logo { font-family: 'Pacifico', cursive; font-size: 1.5rem; color: var(--coral); }
+    .footer-logo span { color: var(--yellow); }
+    .footer-center { font-size: 0.82rem; font-weight: 600; text-align: center; }
+    .footer-emojis { font-size: 1.4rem; letter-spacing: 4px; }
+
+
+    img {
+        height: 130px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div class="food-float">🥕</div>
+  <div class="food-float">🍰</div>
+  <div class="food-float">🥄</div>
+  <div class="food-float">🍪</div>
+  <div class="food-float">🫐</div>
+  <div class="food-float">🌶️</div>
+  <div class="food-float">🧁</div>
+
+  <header>
+    <img src="{{ url_for('static', path='img/logo5.png') }}" alt="FoodToon">
+    <!-- <div class="logo">Food<span>Toon</span> 🍰</div> -->
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Pesquise receitas mágicas...">
+    </div>
+    <div class="nav-btns">
+      {% if user %}
+      <span class="user-greeting">Olá, {{ user.nome }}!</span>
+      <form action="/logout" method="post"><button type="submit" class="btn btn-outline">Sair</button></form>
+      {% else %}
+      <a href="/login" class="btn btn-outline">Entrar</a>
+      <a href="/cadastro" class="btn btn-primary">Criar Conta 🍳</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-badge">✨ Novo · Receitas de Desenho Animado</div>
+      <h1 class="hero-title">
+        Cozinhe como um<br>
+        <span class="highlight">Chef de Cartoon</span>
+      </h1>
+      <p class="hero-desc">
+        Receitas mágicas inspiradas nos seus personagens favoritos!
+        Divertidas, deliciosas e perfeitas para toda a família. 🎨
+      </p>
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-hero">Explorar Receitas 🍽️</button>
+        <a href="#" class="hero-link">Ver categorias →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">200+</div>
+          <div class="stat-label">Receitas</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">50k</div>
+          <div class="stat-label">Chefzinhos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4.9⭐</div>
+          <div class="stat-label">Avaliação</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-orbit">
+        <div class="orbit-dot">🍓</div>
+        <div class="orbit-dot">🍕</div>
+        <div class="orbit-dot">🧁</div>
+        <div class="orbit-dot">🥕</div>
+      </div>
+      <div class="hero-plate">🍳</div>
+    </div>
+  </section>
+
+  <section class="categories-section">
+    <div class="section-title">
+      <h2>Escolha sua Aventura 🗺️</h2>
+      <p>Qual receita mágica vai preparar hoje?</p>
+      <div class="section-divider"><span>🍴</span></div>
+    </div>
+    <div class="categories-grid">
+      <div class="category-card"><span class="cat-emoji">🍰</span><span class="cat-name">Doces</span></div>
+      <div class="category-card"><span class="cat-emoji">🍕</span><span class="cat-name">Salgados</span></div>
+      <div class="category-card"><span class="cat-emoji">🧃</span><span class="cat-name">Bebidas</span></div>
+      <div class="category-card"><span class="cat-emoji">🎂</span><span class="cat-name">Festas</span></div>
+      <div class="category-card"><span class="cat-emoji">🥗</span><span class="cat-name">Saudável</span></div>
+      <div class="category-card"><span class="cat-emoji">🍪</span><span class="cat-name">Kids</span></div>
+    </div>
+  </section>
+
+  <section class="recipes-section">
+    <div class="section-title">
+      <h2>Receitas em Destaque 🌟</h2>
+      <p>As favoritas dos nossos chefzinhos esta semana!</p>
+      <div class="section-divider"><span>🥄</span></div>
+    </div>
+    <div class="recipes-grid">
+
+      <div class="recipe-card">
+        <div class="card-thumb-emoji" style="background: linear-gradient(135deg,#FFD166,#FFA552);">🎂</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tag-doce">Doce</span>
+            <span class="card-tag tag-festa">Festa</span>
+          </div>
+          <div class="card-title">Bolo da Princesa</div>
+          <p class="card-desc">Um doce encantado direto dos contos de fadas, com cobertura de brigadeiro rosa!</p>
+          <div class="card-footer">
+            <div class="card-meta"><span>⏱️ 45min</span><span>🌱 Fácil</span></div>
+            <button class="btn-ver">Ver Receita</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="card-thumb-emoji" style="background: linear-gradient(135deg,#FF6B6B,#FFA552);">🍕</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tag-kids">Kids</span>
+            <span class="card-tag tag-rapido">Rápido</span>
+          </div>
+          <div class="card-title">Pizza Ninja</div>
+          <p class="card-desc">Perfeita para heróis famintos! Monte a sua pizza favorita em formato de estrela.</p>
+          <div class="card-footer">
+            <div class="card-meta"><span>⏱️ 30min</span><span>🌱 Fácil</span></div>
+            <button class="btn-ver">Ver Receita</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="card-thumb-emoji" style="background: linear-gradient(135deg,#A8DFB6,#FFD166);">🥗</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tag-rapido">Saudável</span>
+          </div>
+          <div class="card-title">Salada da Floresta</div>
+          <p class="card-desc">Colorida como um desenho animado! Cheia de vitaminas e ingredientes frescos.</p>
+          <div class="card-footer">
+            <div class="card-meta"><span>⏱️ 15min</span><span>⭐ Médio</span></div>
+            <button class="btn-ver">Ver Receita</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="card-thumb-emoji" style="background: linear-gradient(135deg,#C4B8FF,#FF6B6B);">🍔</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tag-kids">Kids</span>
+            <span class="card-tag tag-festa">Festa</span>
+          </div>
+          <div class="card-title">Hambúrguer Cartoon</div>
+          <p class="card-desc">Gigante e delicioso! O hambúrguer favorito dos heróis de animação.</p>
+          <div class="card-footer">
+            <div class="card-meta"><span>⏱️ 25min</span><span>⭐ Médio</span></div>
+            <button class="btn-ver">Ver Receita</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="card-thumb-emoji" style="background: linear-gradient(135deg,#FFD166,#FF6B6B);">🧁</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tag-doce">Doce</span>
+            <span class="card-tag tag-rapido">Rápido</span>
+          </div>
+          <div class="card-title">Cupcake Mágico</div>
+          <p class="card-desc">Com cobertura colorida e granulado arco-íris, esses cupcakes são pura magia!</p>
+          <div class="card-footer">
+            <div class="card-meta"><span>⏱️ 35min</span><span>🌱 Fácil</span></div>
+            <button class="btn-ver">Ver Receita</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="card-thumb-emoji" style="background: linear-gradient(135deg,#FFA552,#FFD166);">🍩</div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tag-doce">Doce</span>
+            <span class="card-tag tag-kids">Kids</span>
+          </div>
+          <div class="card-title">Rosquinha do Homer</div>
+          <p class="card-desc">A rosquinha mais famosa dos desenhos, com cobertura rosa e granulados!</p>
+          <div class="card-footer">
+            <div class="card-meta"><span>⏱️ 50min</span><span>🔥 Avançado</span></div>
+            <button class="btn-ver">Ver Receita</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="cta-banner">
+    <div class="cta-text">
+      <h2>Crie sua conta e<br><span>cozinhe sem limites!</span> 🧑‍🍳</h2>
+      <p>Salve suas receitas favoritas, compartilhe suas criações e junte-se a milhares de chefzinhos.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="/cadastro" class="btn btn-primary btn-cta-primary">Criar Conta Grátis 🍳</a>
+      <a href="/login" class="btn btn-cta-secondary">Já tenho conta</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo"><span>PC'S</span> 🍰</div>
+    <div class="footer-center">
+      <div class="footer-emojis">🍕 🎂 🧁 🍓 🥕</div>
+      <div style="margin-top:8px;">© 2026 PC'S · Receitas mágicas para toda a família</div>
+    </div>
+    <div style="font-size:0.8rem; font-weight:700;">Feito com ❤️ e muita farinha</div>
+  </footer>
+
+</body>
+</html>
