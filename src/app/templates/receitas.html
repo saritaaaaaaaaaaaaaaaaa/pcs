@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explorar Receitas · FoodToon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/receitas.css') }}">
+</head>
+<body>
+  <div class="bg-blobs" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <header>
+    <a href="{{ url_for('index') }}" class="brand"><img src="{{ url_for('static', path='img/logo5.png') }}" alt="FoodToon"></a>
+    <form class="header-search" action="{{ url_for('receitas') }}" method="get">
+      <span aria-hidden="true">🔍</span>
+      <input type="search" name="titulo" value="{{ filters.titulo }}" placeholder="Pesquise receitas mágicas...">
+    </form>
+    <nav class="nav-btns">
+      {% if user %}
+      <span class="user-greeting">Olá, {{ user.nome }}!</span>
+      <form action="/logout" method="post"><button type="submit" class="btn btn-outline">Sair</button></form>
+      {% else %}
+      <a href="/login" class="btn btn-outline">Entrar</a>
+      <a href="/cadastro" class="btn btn-primary">Criar Conta 🍳</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-intro">
+      <a href="{{ url_for('index') }}" class="back-link">← Voltar ao início</a>
+      <div class="intro-copy">
+        <span class="eyebrow">✨ Cozinha encantada</span>
+        <h1>Explore receitas <span>mágicas</span></h1>
+        <p>Encontre sua próxima aventura na cozinha e deixe a imaginação temperar o prato.</p>
+      </div>
+    </section>
+
+    <section class="filter-panel" aria-labelledby="filter-title">
+      <div class="filter-heading"><span>🔎</span><h2 id="filter-title">Encontre a receita ideal</h2></div>
+      <form class="filters" action="{{ url_for('receitas') }}" method="get">
+        <label>Título da receita
+          <input type="search" name="titulo" value="{{ filters.titulo }}" placeholder="Ex.: bolo de chocolate">
+        </label>
+        <label>Categoria
+          <select name="categoria_id">
+            <option value="">Todas as categorias</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}" {% if filters.categoria_id == category.id %}selected{% endif %}>{{ category.nome }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Dificuldade
+          <select name="dificuldade">
+            <option value="">Todas as dificuldades</option>
+            {% for difficulty in difficulties %}
+            <option value="{{ difficulty.dificuldade }}" {% if filters.dificuldade|lower == difficulty.dificuldade|lower %}selected{% endif %}>{{ difficulty.dificuldade }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <button class="btn btn-primary filter-button" type="submit">Buscar receitas</button>
+      </form>
+    </section>
+
+    {% if has_filters %}
+    <section class="recipe-section" aria-labelledby="results-title">
+      <div class="section-heading"><div><h2 id="results-title">Resultados da busca</h2><p>Receitas encontradas conforme seus filtros.</p></div></div>
+      {% include 'partials/recipe_cards.html' with context %}
+    </section>
+    {% endif %}
+
+    <section class="recipe-section" aria-labelledby="latest-title">
+      <div class="section-heading"><div><h2 id="latest-title">Últimas receitas adicionadas</h2><p>Novidades fresquinhas saídas da nossa cozinha.</p></div><span>🧁</span></div>
+      {% set recipes = latest_recipes %}{% include 'partials/recipe_cards.html' %}
+    </section>
+
+    <section class="recipe-section rated-section" aria-labelledby="rated-title">
+      <div class="section-heading"><div><h2 id="rated-title">Receitas mais bem avaliadas</h2><p>As queridinhas dos nossos chefzinhos.</p></div><span>⭐</span></div>
+      {% set recipes = top_rated_recipes %}{% include 'partials/recipe_cards.html' %}
+    </section>
+  </main>
+</body>
+</html>

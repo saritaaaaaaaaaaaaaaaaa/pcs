@@ -1,0 +1,20 @@
+{% if recipes is not defined %}{% set recipes = filtered_recipes %}{% endif %}
+{% if recipes %}
+<div class="recipes-grid">
+  {% for recipe in recipes %}
+  <article class="recipe-card">
+    <div class="card-image">
+      {% if recipe.imagem %}<img src="{{ recipe.imagem }}" alt="{{ recipe.titulo }}">{% else %}<span aria-hidden="true">🍽️</span>{% endif %}
+    </div>
+    <div class="card-body">
+      <div class="card-tags"><span>{{ recipe.categoria_nome or 'Sem categoria' }}</span>{% if recipe.media_avaliacoes is defined and recipe.media_avaliacoes %}<span class="rating">★ {{ '%.1f'|format(recipe.media_avaliacoes) }}</span>{% endif %}</div>
+      <h3>{{ recipe.titulo }}</h3>
+      <p>{{ recipe.descricao or 'Sem descrição disponível.' }}</p>
+      <div class="card-footer"><span>⏱️ {{ recipe.tempo_preparo or 'Tempo não informado' }}</span><span>🌱 {{ recipe.dificuldade or 'Dificuldade não informada' }}</span></div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><span>🍰</span><p>Ainda não há receitas para mostrar por aqui.</p></div>
+{% endif %}
